@@ -33,54 +33,80 @@ func CountPositiveNegative(Arr []int) (int, int) {
 		}
 	}
 
-	return NegativeCount, PositiveCount
+	return PositiveCount, NegativeCount
 }
 
 func main() {
+	//Variables that hold the start and end values for the x and y axes.
 	var XStart, XEnd int
 	var YStart, YEnd int
 
-	var XNegativeStr string
-	NNumberLength := 0
+	//Variables that hold the x and y values of the point P(x, y)
+	//determined by data input from the user.
+	var XValue, YValue int
 
-	//Draws the x axis.
+	//Variable to keep negative values on the x-axis as string.
+	var XNegativeStr string
+	//Total length of negative numbers on the x axis.
+	NNumberLengthX := 0
+
+	//It gets the start and end value of the x axis
+	//with data input from the user.
 	fmt.Print("Enter the starting value of the x axis (-): ")
 	_, Err := fmt.Scanln(&XStart)
+	//Error checking.
 	if Err != nil {
 		HandleError(Err)
+		return
+	}
+	//Error checking.
+	if XStart >= 0 {
+		fmt.Println("You entered the wrong starting value for the x axis. Please enter a negative number.")
 		return
 	}
 	fmt.Print("\nEnter the end value of the x axis (+): ")
 	_, Err = fmt.Scanln(&XEnd)
+	//Error checking.
 	if Err != nil {
 		HandleError(Err)
 		return
 	}
+	//Error checking.
+	if XEnd <= 0 {
+		fmt.Println("You entered the wrong end value for the x axis. Please enter a positive number.")
+		return
+	}
 	
-	//Draws the y axis.
+	//It gets the start and end value of the y axis
+	//with data input from the user.
 	fmt.Print("\nEnter the starting value of the y axis (-): ")
 	_, Err = fmt.Scanln(&YStart)
+	//Error checking.
 	if Err != nil {
 		HandleError(Err)
+		return
+	}
+	//Error checking.
+	if YStart >= 0 {
+		fmt.Println("You entered the wrong starting value for the y axis. Please enter a negative number.")
 		return
 	}
 	fmt.Print("\nEnter the end value of the y axis (+): ")
 	_, Err = fmt.Scanln(&YEnd)
+	//Error checking.
 	if Err != nil {
 		HandleError(Err)
+		return
+	}
+	//Error checking.
+	if YEnd <= 0 {
+		fmt.Println("You entered the wrong end value for the y axis. Please enter a positive number.")
 		return
 	}
 
 	//Calculates the number of points on the x and y axis.
 	XLength := XEnd - XStart + 1
 	YLength := YEnd - YStart + 1
-	
-	//Error checking.
-	//An axis length cannot be zero.
-	if XLength <= 0 || YLength <= 0 {
-		fmt.Println("You entered the wrong range. Please try again.")
-		return
-	}
 
 	//It keeps the points to be displayed on the x axis in an array.
 	X := make([]int, XLength)
@@ -100,8 +126,8 @@ func main() {
 
 	//Calculates the number of points with positive and negative values
 	//to display on the x and y axis.
-	XNegative, XPositive := CountPositiveNegative(X)
-	YNegative, YPositive := CountPositiveNegative(Y)
+	XPositive, XNegative := CountPositiveNegative(X)
+	YPositive, YNegative := CountPositiveNegative(Y)
 
 	//Prints the number of points with positive and negative values
 	//to be displayed on the x and y axis.
@@ -113,37 +139,73 @@ func main() {
 
 	//It determines the x and y values of the point P(x, y)
 	//with data input from the user.
-	XValue, YValue := 0, 0
 	fmt.Print("Enter the x value of the point: ")
 	_, Err = fmt.Scanln(&XValue)
+	//Error checking.
 	if Err != nil {
 		HandleError(Err)
 		return
+	}
+	//Error checking.
+	if XValue < XStart || XValue > XEnd {
+		fmt.Println("You entered the x value of point P out of range. Please try again.")
 	}
 	fmt.Print("Enter the y value of the point: ")
 	_, Err = fmt.Scanln(&YValue)
+	//Error checking.
 	if Err != nil {
 		HandleError(Err)
 		return
 	}
+	//Error checking.
+	if YValue < YStart ||YValue > YEnd {
+		fmt.Println("You entered the y value of point P out of range. Please try again.")
+	}
 	fmt.Print("\n")
+
+	//Finds the location of point P(x, y).
+	//
+	//Point P(x, y) can be found in 7 different regions.
+	//In the 1st region, it is in the form of P(+, +).
+	//In the 2nd region, it is in the form of P(-, +).
+	//In the 3rd region, it is in the form of P(-, -).
+	//In the 4th region, it is in the form of P(+, -).
+	//On the y axis, it is in the form of P(0, y).
+	//On the x axis, it is in the form of P(x, 0).
+	//At the origin, it is in the form of P(0, 0).
+	if XValue > 0 && YValue > 0 {
+		fmt.Printf("The point P(%d, %d) is in the 1st region of the x - y coordinate plane.\n", XValue, YValue)
+	} else if XValue < 0 && YValue > 0 {
+		fmt.Printf("The point P(%d, %d) is in the 2nd region of the x - y coordinate plane.\n", XValue, YValue)
+	} else if XValue < 0 && YValue < 0 {
+		fmt.Printf("The point P(%d, %d) is in the 3rd region of the x - y coordinate plane.\n", XValue, YValue)
+	} else if XValue > 0 && YValue < 0 {
+		fmt.Printf("The point P(%d, %d) is in the 4th region of the x - y coordinate plane.\n", XValue, YValue)
+	} else if XValue == 0 && YValue != 0 {
+		fmt.Printf("The point P(%d, %d) is on the y axis.", XValue, YValue)
+	} else if XValue != 0 && YValue == 0 {
+		fmt.Printf("The point P(%d, %d) is on the x axis.", XValue, YValue)
+	} else if XValue == 0 && YValue == 0 {
+		fmt.Printf("The point P(%d, %d) is on the origin.", XValue, YValue)
+	}
+	fmt.Print("\n\n")
 
 	//It calculates the number of spaces that must be present before writing
 	//the value of each point to be shown on the y axis.
 	for i := 0; i < XNegative; i++ {
 		XNegativeStr = strconv.Itoa(X[i])
-		NNumberLength += len(XNegativeStr)
+		NNumberLengthX += len(XNegativeStr)
 	}
-	NumberOfSpaces := NNumberLength + XNegative*4
+	NumberOfFrontSpaces := NNumberLengthX + XNegative*4
 
 	//It forms the positive part of the y axis.
 	for i := 0; i < YPositive; i++ {
-		for j := 0; j < NumberOfSpaces; j++ {
+		for j := 0; j < NumberOfFrontSpaces; j++ {
 			fmt.Print(" ")
 		}
 		fmt.Print("+")
 		fmt.Println(YLength - YNegative - 1 - i)
-		for j := 0; j < NumberOfSpaces; j++ {
+		for j := 0; j < NumberOfFrontSpaces; j++ {
 			fmt.Print(" ")
 		}
 		fmt.Println("|")
@@ -168,11 +230,11 @@ func main() {
 
 	//It forms the negative part of the y axis.
 	for i := 0; i < YNegative; i++ {
-		for j := 0; j < NumberOfSpaces; j++ {
+		for j := 0; j < NumberOfFrontSpaces; j++ {
 			fmt.Print(" ")
 		}
 		fmt.Println("|")
-		for j := 0; j < NumberOfSpaces; j++ {
+		for j := 0; j < NumberOfFrontSpaces; j++ {
 			fmt.Print(" ")
 		}
 		fmt.Println(Y[YNegative - 1 - i])
