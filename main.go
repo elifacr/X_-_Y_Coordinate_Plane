@@ -6,152 +6,152 @@ import (
 )
 
 //Handles the error.
-func handle_error(err error) {
-	if err != nil {
-		switch err.Error() {
+func HandleError(Err error) {
+	if Err != nil {
+		switch Err.Error() {
 		case "strconv.ParseInt: error parsing, invalid syntax":
 			fmt.Println("Invalid input. Please enter a valid integer value.")
 		case "strconv.ParseInt: value out of range":
 			fmt.Println("Input value is out of range. Please enter a value within the specified axis range.")
 		default:
-			fmt.Println("An error occurred:", err)
+			fmt.Println("An error occurred:", Err)
 		}
 	}
 }
 
 //Calculates the number of points with positive and negative
 //values to display on the x and y axis.
-func count_positive_negative(arr []int) (int, int) {
-	positive_count := 0
-	negative_count := 0
+func CountPositiveNegative(Arr []int) (int, int) {
+	PositiveCount := 0
+	NegativeCount := 0
 
-	for _, value := range arr {
-		if value > 0 {
-			positive_count++
-		} else if value < 0 {
-			negative_count++
+	for _, Value := range Arr {
+		if Value > 0 {
+			PositiveCount++
+		} else if Value < 0 {
+			NegativeCount++
 		}
 	}
 
-	return negative_count, positive_count
+	return NegativeCount, PositiveCount
 }
 
 func main() {
-	var x_start, x_end int
-	var y_start, y_end int
+	var XStart, XEnd int
+	var YStart, YEnd int
 
-	var x_negative_str string
-	n_number_length := 0
+	var XNegativeStr string
+	NNumberLength := 0
 
 	//Draws the x axis.
 	fmt.Print("Enter the starting value of the x axis (-): ")
-	_, err := fmt.Scanln(&x_start)
-	if err != nil {
-		handle_error(err)
+	_, Err := fmt.Scanln(&XStart)
+	if Err != nil {
+		HandleError(Err)
 		return
 	}
 	fmt.Print("\nEnter the end value of the x axis (+): ")
-	_, err = fmt.Scanln(&x_end)
-	if err != nil {
-		handle_error(err)
+	_, Err = fmt.Scanln(&XEnd)
+	if Err != nil {
+		HandleError(Err)
 		return
 	}
 	
 	//Draws the y axis.
 	fmt.Print("\nEnter the starting value of the y axis (-): ")
-	_, err = fmt.Scanln(&y_start)
-	if err != nil {
-		handle_error(err)
+	_, Err = fmt.Scanln(&YStart)
+	if Err != nil {
+		HandleError(Err)
 		return
 	}
 	fmt.Print("\nEnter the end value of the y axis (+): ")
-	_, err = fmt.Scanln(&y_end)
-	if err != nil {
-		handle_error(err)
+	_, Err = fmt.Scanln(&YEnd)
+	if Err != nil {
+		HandleError(Err)
 		return
 	}
 
 	//Calculates the number of points on the x and y axis.
-	x_length := x_end - x_start + 1
-	y_length := y_end - y_start + 1
+	XLength := XEnd - XStart + 1
+	YLength := YEnd - YStart + 1
 	
 	//Error checking.
 	//An axis length cannot be zero.
-	if x_length <= 0 || y_length <= 0 {
+	if XLength <= 0 || YLength <= 0 {
 		fmt.Println("You entered the wrong range. Please try again.")
 		return
 	}
 
 	//It keeps the points to be displayed on the x axis in an array.
-	x := make([]int, x_length)
-	for i := 0; i < x_length; i++ {
-		x[i] = x_start + i
+	X := make([]int, XLength)
+	for i := 0; i < XLength; i++ {
+		X[i] = XStart + i
 	}
 
 	//It keeps the points to be displayed on the y axis in an array.
-	y := make([]int, y_length)
-	for i := 0; i < y_length; i++ {
-		y[i] = y_start + i
+	Y := make([]int, YLength)
+	for i := 0; i < YLength; i++ {
+		Y[i] = YStart + i
 	}
 
 	//Prints the data of the points on the x and y axis to the screen.
-	fmt.Println("\nx axis:", x)
-	fmt.Println("y axis:", y)
+	fmt.Println("\nx axis:", X)
+	fmt.Println("y axis:", Y)
 
 	//Calculates the number of points with positive and negative values
 	//to display on the x and y axis.
-	x_negative, x_positive := count_positive_negative(x)
-	y_negative, y_positive := count_positive_negative(y)
+	XNegative, XPositive := CountPositiveNegative(X)
+	YNegative, YPositive := CountPositiveNegative(Y)
 
 	//Prints the number of points with positive and negative values
 	//to be displayed on the x and y axis.
-	fmt.Println("\nNumber of positive x values:", x_positive)
-	fmt.Println("Number of negative x values:", x_negative)
-	fmt.Println("Number of positive y values:", y_positive)
-	fmt.Println("Number of negative y values:", y_negative)
+	fmt.Println("\nNumber of positive x values:", XPositive)
+	fmt.Println("Number of negative x values:", XNegative)
+	fmt.Println("Number of positive y values:", YPositive)
+	fmt.Println("Number of negative y values:", YNegative)
 	fmt.Print("\n")
 
 	//It determines the x and y values of the point P(x, y)
 	//with data input from the user.
-	x_value, y_value := 0, 0
+	XValue, YValue := 0, 0
 	fmt.Print("Enter the x value of the point: ")
-	_, err = fmt.Scanln(&x_value)
-	if err != nil {
-		handle_error(err)
+	_, Err = fmt.Scanln(&XValue)
+	if Err != nil {
+		HandleError(Err)
 		return
 	}
 	fmt.Print("Enter the y value of the point: ")
-	_, err = fmt.Scanln(&y_value)
-	if err != nil {
-		handle_error(err)
+	_, Err = fmt.Scanln(&YValue)
+	if Err != nil {
+		HandleError(Err)
 		return
 	}
 	fmt.Print("\n")
 
 	//It calculates the number of spaces that must be present before writing
 	//the value of each point to be shown on the y axis.
-	for i := 0; i < x_negative; i++ {
-		x_negative_str = strconv.Itoa(x[i])
-		n_number_length += len(x_negative_str)
+	for i := 0; i < XNegative; i++ {
+		XNegativeStr = strconv.Itoa(X[i])
+		NNumberLength += len(XNegativeStr)
 	}
-	number_of_spaces := n_number_length + x_negative*4
+	NumberOfSpaces := NNumberLength + XNegative*4
 
 	//It forms the positive part of the y axis.
-	for i := 0; i < y_positive; i++ {
-		for j := 0; j < number_of_spaces; j++ {
+	for i := 0; i < YPositive; i++ {
+		for j := 0; j < NumberOfSpaces; j++ {
 			fmt.Print(" ")
 		}
 		fmt.Print("+")
-		fmt.Println(y_length - y_negative - 1 - i)
-		for j := 0; j < number_of_spaces; j++ {
+		fmt.Println(YLength - YNegative - 1 - i)
+		for j := 0; j < NumberOfSpaces; j++ {
 			fmt.Print(" ")
 		}
 		fmt.Println("|")
 	}
 
 	//It forms the negative part of the x axis.
-	for i := 0; i < x_negative; i++ {
-		fmt.Print(x[i])
+	for i := 0; i < XNegative; i++ {
+		fmt.Print(X[i])
 		fmt.Print(" -- ")
 	}
 
@@ -159,22 +159,22 @@ func main() {
 	fmt.Print("O")
 
 	//It forms the positive part of the x axis.
-	for i := 0; i < x_positive; i++ {
+	for i := 0; i < XPositive; i++ {
 		fmt.Print(" -- ")
 		fmt.Print("+")
-		fmt.Print(x[x_negative + 1 + i])
+		fmt.Print(X[XNegative + 1 + i])
 	}
 	fmt.Print("\n")
 
 	//It forms the negative part of the y axis.
-	for i := 0; i < y_negative; i++ {
-		for j := 0; j < number_of_spaces; j++ {
+	for i := 0; i < YNegative; i++ {
+		for j := 0; j < NumberOfSpaces; j++ {
 			fmt.Print(" ")
 		}
 		fmt.Println("|")
-		for j := 0; j < number_of_spaces; j++ {
+		for j := 0; j < NumberOfSpaces; j++ {
 			fmt.Print(" ")
 		}
-		fmt.Println(y[y_negative - i - 1])
+		fmt.Println(Y[YNegative - 1 - i])
 	}
 }
