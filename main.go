@@ -5,28 +5,74 @@ import (
 	"strconv"
 )
 
+func handle_error(err error) {
+    if err != nil {
+        switch err.Error() {
+		case "strconv.ParseInt: error parsing, invalid syntax":
+            fmt.Println("Invalid input. Please enter a valid integer value.")
+        case "strconv.ParseInt: value out of range":
+            fmt.Println("Input value is out of range. Please enter a value within the specified axis range.")
+        default:
+            fmt.Println("An error occurred:", err)
+        }
+    }
+}
+
+func count_positive_negative(arr []int) (int, int) {
+	positive_count := 0
+	negative_count := 0
+
+	for _, value := range arr {
+		if value > 0 {
+			positive_count++
+		} else if value < 0 {
+			negative_count++
+		}
+	}
+
+	return negative_count, positive_count
+}
+
 func main() {
 	var x_start, x_end int
 	var y_start, y_end int
-
-	var x_negative, x_positive int
-	var y_negative, y_positive int
 
 	var x_negative_str string
 	number_length := 0
 
 	fmt.Print("Enter the starting value of the x axis: ")
-	fmt.Scanln(&x_start)
+	_, err := fmt.Scanln(&x_start)
+	if err != nil {
+		handle_error(err)
+		return
+	}
 	fmt.Print("\nEnter the end value of the x axis: ")
-	fmt.Scanln(&x_end)
+	_, err = fmt.Scanln(&x_end)
+	if err != nil {
+		handle_error(err)
+		return
+	}
 	
 	fmt.Print("\nEnter the starting value of the y axis: ")
-	fmt.Scanln(&y_start)
+	_, err = fmt.Scanln(&y_start)
+	if err != nil {
+        handle_error(err)
+        return
+    }
 	fmt.Print("\nEnter the end value of the y axis: ")
-	fmt.Scanln(&y_end)
+	_, err = fmt.Scanln(&y_end)
+	if err != nil {
+        handle_error(err)
+        return
+    }
 
 	x_length := x_end - x_start + 1
 	y_length := y_end - y_start + 1
+	
+	if x_length <= 0 || y_length <= 0 {
+		fmt.Println("You entered the wrong range. Please try again.")
+		return
+	}
 
 	//Points to display on the x axis.
 	x := make([]int, x_length)
@@ -43,19 +89,8 @@ func main() {
 	fmt.Println("\nx axis:", x)
 	fmt.Println("y axis:", y)
 
-	for i := 0; i < x_length; i++ {
-		if x[i] < 0 {
-			x_negative++
-		}
-	}
-	x_positive = x_length - x_negative - 1
-
-	for i := 0; i < y_length; i++ {
-		if y[i] < 0 {
-			y_negative++
-		}
-	}
-	y_positive = y_length - y_negative - 1
+	x_negative, x_positive := count_positive_negative(x)
+	y_negative, y_positive := count_positive_negative(y)
 
 	fmt.Println("\nNumber of positive x values:", x_positive)
 	fmt.Println("Number of negative x values:", x_negative)
