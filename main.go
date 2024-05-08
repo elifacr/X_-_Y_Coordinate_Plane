@@ -50,6 +50,22 @@ func main() {
 	//Total length of negative numbers on the x axis.
 	NNumberLengthX := 0
 
+	//The variable YValueStr is created to calculate the character
+	//length of the y value of point P.
+	YValueStr := strconv.Itoa(YValue)
+	//The variable NumberOfSpacesForPoint holds the number of spaces required
+	//to the right of the y axis to mark point P in line with the x value.
+	NumberOfSpacesForPoint := 0
+
+	//If the P point is in the 1st region of the coordinate plane,
+	//it is created to convert the positive numbers up to the x value
+	//of the P point into a string.
+	var X1Str string
+	//If the P point is in the 1st region of the coordinate plane,
+	//it is created to calculate the total character length of the positive
+	//numbers up to the x value of the P point.
+	var X1Length int
+
 	//It gets the start and end value of the x axis
 	//with data input from the user.
 	fmt.Print("Enter the starting value of the x axis (-): ")
@@ -175,6 +191,13 @@ func main() {
 	//At the origin, it is in the form of P(0, 0).
 	if XValue > 0 && YValue > 0 {
 		fmt.Printf("The point P(%d, %d) is in the 1st region of the x - y coordinate plane.\n", XValue, YValue)
+		//Calculates the number of spaces required to the right of the y axis
+		//to mark point P in line with the x value.
+		for i := 0; i < XValue; i++ {
+			X1Str = strconv.Itoa(i + 1)
+			X1Length += len(X1Str)
+		}
+		NumberOfSpacesForPoint = X1Length + XValue*5 - 1 - len(YValueStr)
 	} else if XValue < 0 && YValue > 0 {
 		fmt.Printf("The point P(%d, %d) is in the 2nd region of the x - y coordinate plane.\n", XValue, YValue)
 	} else if XValue < 0 && YValue < 0 {
@@ -196,16 +219,26 @@ func main() {
 		XNegativeStr = strconv.Itoa(X[i])
 		NNumberLengthX += len(XNegativeStr)
 	}
-	NumberOfFrontSpaces := NNumberLengthX + XNegative*4
+	NumberOfInitialSpaces := NNumberLengthX + XNegative*4
 
 	//It forms the positive part of the y axis.
 	for i := 0; i < YPositive; i++ {
-		for j := 0; j < NumberOfFrontSpaces; j++ {
+		for j := 0; j < NumberOfInitialSpaces; j++ {
 			fmt.Print(" ")
 		}
 		fmt.Print("+")
-		fmt.Println(YLength - YNegative - 1 - i)
-		for j := 0; j < NumberOfFrontSpaces; j++ {
+		fmt.Print(YLength - YNegative - 1 - i)
+		//It checks whether the y value of point P is above the x axis.
+		//If the y value is above the x axis, it marks point P.
+		if YValue == YLength - YNegative - 1 - i {
+			for j := 0; j < NumberOfSpacesForPoint; j++ {
+				fmt.Print(" ")
+			}
+			fmt.Println("*")
+		} else {
+			fmt.Print("\n")
+		}
+		for j := 0; j < NumberOfInitialSpaces; j++ {
 			fmt.Print(" ")
 		}
 		fmt.Println("|")
@@ -230,11 +263,11 @@ func main() {
 
 	//It forms the negative part of the y axis.
 	for i := 0; i < YNegative; i++ {
-		for j := 0; j < NumberOfFrontSpaces; j++ {
+		for j := 0; j < NumberOfInitialSpaces; j++ {
 			fmt.Print(" ")
 		}
 		fmt.Println("|")
-		for j := 0; j < NumberOfFrontSpaces; j++ {
+		for j := 0; j < NumberOfInitialSpaces; j++ {
 			fmt.Print(" ")
 		}
 		fmt.Println(Y[YNegative - 1 - i])
