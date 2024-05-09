@@ -57,14 +57,14 @@ func main() {
 	//to the right of the y axis to mark point P in line with the x value.
 	NumberOfSpacesForPoint := 0
 
-	//If the P point is in the 1st region of the coordinate plane,
+	//If the P point is in the 1st or 4th region of the coordinate plane,
 	//it is created to convert the positive numbers up to the x value
 	//of the P point into a string.
-	var X1Str string
-	//If the P point is in the 1st region of the coordinate plane,
+	var X14Str string
+	//If the P point is in the 1st or 4th region of the coordinate plane,
 	//it is created to calculate the total character length of the positive
 	//numbers up to the x value of the P point.
-	var X1Length int
+	var X14Length int
 
 	//It gets the start and end value of the x axis
 	//with data input from the user.
@@ -194,16 +194,23 @@ func main() {
 		//Calculates the number of spaces required to the right of the y axis
 		//to mark point P in line with the x value.
 		for i := 0; i < XValue; i++ {
-			X1Str = strconv.Itoa(i + 1)
-			X1Length += len(X1Str)
+			X14Str = strconv.Itoa(i + 1)
+			X14Length += len(X14Str)
 		}
-		NumberOfSpacesForPoint = X1Length + XValue*5 - 1 - len(YValueStr)
+		NumberOfSpacesForPoint = X14Length + XValue*5 - 1 - len(YValueStr)
 	} else if XValue < 0 && YValue > 0 {
 		fmt.Printf("The point P(%d, %d) is in the 2nd region of the x - y coordinate plane.\n", XValue, YValue)
 	} else if XValue < 0 && YValue < 0 {
 		fmt.Printf("The point P(%d, %d) is in the 3rd region of the x - y coordinate plane.\n", XValue, YValue)
 	} else if XValue > 0 && YValue < 0 {
 		fmt.Printf("The point P(%d, %d) is in the 4th region of the x - y coordinate plane.\n", XValue, YValue)
+		//Calculates the number of spaces required to the right of the y axis
+		//to mark point P in line with the x value.
+		for i := 0; i < XValue; i++ {
+			X14Str = strconv.Itoa(i + 1)
+			X14Length += len(X14Str)
+		}
+		NumberOfSpacesForPoint = X14Length + XValue*5 - 1 - len(YValueStr)
 	} else if XValue == 0 && YValue != 0 {
 		fmt.Printf("The point P(%d, %d) is on the y axis.", XValue, YValue)
 	} else if XValue != 0 && YValue == 0 {
@@ -234,6 +241,7 @@ func main() {
 			for j := 0; j < NumberOfSpacesForPoint; j++ {
 				fmt.Print(" ")
 			}
+			//Point P is in region 1.
 			fmt.Println("*")
 		} else {
 			fmt.Print("\n")
@@ -270,6 +278,17 @@ func main() {
 		for j := 0; j < NumberOfInitialSpaces; j++ {
 			fmt.Print(" ")
 		}
-		fmt.Println(Y[YNegative - 1 - i])
+		fmt.Print(Y[YNegative - 1 - i])
+		//It checks whether the y value of point P is above the x axis.
+		//If the y value is above the x axis, it marks point P.
+		if YValue == Y[YNegative - 1 - i] {
+			for j := 0; j < NumberOfSpacesForPoint; j++ {
+				fmt.Print(" ")
+			}
+			//Point P is in region 4.
+			fmt.Println("*")
+		} else {
+			fmt.Print("\n")
+		}
 	}
 }
